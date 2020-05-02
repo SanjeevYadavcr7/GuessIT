@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Scrambler Game</title>
+    <style>
+      *{margin:0;padding:0;}
+      .main{
+        width:99.5%;height:98vh;border:1px solid red;
+        display:flex;justify-content:center;align-items:center;}
+      .box{width:60%;height:60%;border:2px solid red;flex-direction:column;
+      display:flex;justify-content:center;align-items:center;}
+      input{width:80%;height:3vh;border:2px solid blue;margin-bottom:2vh;}
+      button{width:20%;height:4vh;border:2px solid blue;background:blue;color:white;}
+      .hidden{display:none;}
+    </style>
+  </head>
+  <body>
+
+    <div class="main">
+      <div class="box">
+        <button type="button" class="score">0</button>
+        <p class="msg"></p>
+        <input type="text" class="hidden">
+        <button type="button" class="btn">START</button>
+      </div>
+    </div>
+
+    <script>
+
+      let btn = document.querySelector('.btn');
+      let msg = document.querySelector('.msg');
+      let input = document.querySelector('.hidden');
+      let result = document.querySelector('.score');
+      let playing = false;
+      let words = ['python','javascript','ruby','django','reactjs','angularjs','react native','electron','swift','java','rtool'];
+      let newword = "";
+      let scrambled_word = "";
+
+
+      createWords = () =>{
+        let rand_index = Math.floor(Math.random() * words.length);
+        let temp = words[rand_index];
+        return temp;
+      }
+
+      scramble = (arr) =>{
+        for(let i=arr.length-1;i>0;i--)
+        {
+          let temp = arr[i];
+          let rand_index = Math.floor(Math.random() * (i+1));
+           arr[i] = arr[rand_index];
+          arr[rand_index] = temp;
+        }
+        return arr;
+      }
+
+      btn.addEventListener('click',function(){
+        if(!playing)
+        {
+          playing = true;
+          btn.innerHTML = "GUESS";
+          input.style.display = "block";
+          newword = createWords();
+          scrambled_word = scramble(newword.split("")).join("");
+          msg.innerHTML = scrambled_word;
+        }
+        else{
+          let word = input.value;
+          if(word === newword)
+          {
+            playing = false;
+            msg.innerHTML = `Correct ${newword}`;
+            let val = result.innerHTML;
+            let a = parseInt(val);
+            result.innerHTML = a+1;
+            input.value = "";
+            input.style.display = "none";
+            btn.innerHTML = "continue";
+
+          }
+          else{
+            msg.innerHTML = `Try again : ${scrambled_word}`;
+            input.value = "";
+          }
+        }
+      })
+
+
+
+    </script>
+
+
+  </body>
+</html>

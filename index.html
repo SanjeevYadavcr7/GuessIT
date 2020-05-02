@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Guess It</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap');
+
+      *{margin:0;padding:0;}
+      .main{width:100%;height:100vh;
+        overflow: hidden;
+      }
+      header
+      {
+        color:#fff;
+        height: 18vh;
+        background-color:#ff7979;
+        font-family: 'Montserrat', sans-serif;
+        text-transform:uppercase;
+        letter-spacing:0.05em;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        font-size: 2em;
+        text-shadow:2px 4px #eb4d4b;
+        transition-property:all;transition:0.9s;
+        transition-timing-function:cubic-bezier(0.65,-0.25,0.25,1.95);
+        overflow: hidden;
+
+      }
+      header:hover{letter-spacing:0.22em;word-spacing:0.2rem;
+        font-size:2em;cursor:pointer;}
+      .hidden{display:none;}
+
+      section
+      {
+        width:100%;height:82vh;background:#ff7979;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+      }
+      .gameArea{
+        width:55%;min-height:400px;
+        border-radius:0px;
+        padding:20px 0;
+        border:1px solid #ff7979;
+        background: #fb4d4b;
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        align-items:center;
+        flex-direction:center;
+        border:0px solid #ff7979;
+        box-shadow:-2px 20px 16px -5px #ef7979;
+        box-shadow: 10px 0 0 #F0F0F0, 20px 0 0 #fb4d4b, 30px 0 0 #F0F0F0, 0 10px 0 #F0F0F0, 10px 10px 0 #fb4d4b, 20px 10px 0 #F0F0F0, 30px 10px 0 #fb4d4b, 0 20px 0 #fb4d4b, 10px 20px 0 #F0F0F0, 20px 20px 0 #fb4d4b, 30px 20px 0 #F0F0F0, 0 30px 0 #F0F0F0, 10px 30px 0 #fb4d4b, 20px 30px 0 #F0F0F0, 30px 30px 0 #fb4d4b, -2px 20px 12px -5px #fb4d4b;
+      }
+      input
+      {
+        width:60%;height:3em;border:0;border-radius:4px;text-align:center;
+        box-shadow:2px 4px 6px #cb4d4b;
+        color:#444;
+        font-size:1.2em;
+        font-family:'Montserrat',cursive;
+        letter-spacing:0.06em;
+        margin-bottom:1em;
+        animation: fadeIn ease 0.9s;
+      }
+
+      input:focus{outline:none;}
+      button
+      {
+        margin-top:0px;border:0px;border-radius:5px;
+        padding:1rem 2rem;
+        font-family:'Montserrat',cursive;
+        text-transform:uppercase;
+        font-size:1em;
+        font-weight:bold;background:#fff;color:#fb4d4b;
+        transition-property:all;transition:0.5s;
+        transition-timing-function:cubic-bezier(0.65,-0.25,0.25,1.95);
+      }
+      button:focus{outline:none;}
+      button:hover{letter-spacing:0.125em;word-spacing:0.2rem;cursor:pointer;}
+      h3{color:white;font-family:'Montserrat',sans-serif;font-size:2em;}
+      .msg{margin-top:-2em;margin-bottom:0em;}
+      .score{margin-top:1em;width: 2em;height: 2em;padding: 0;}
+      @keyframes fadeIn {
+      0% {opacity:0;width:0%;}
+      100% {opacity:1;;width:60%;} }
+      @keyframes fadeOut2{
+        0%{margin-top: 100%;opacity: 0;}
+        10%{margin-top: 0%;opacity: 1;}
+      }
+      @media only screen and (max-width:500px)
+      {
+        .main{width:100%;height:100vh;overflow:hidden;}
+        header{height:22vh;font-size:1.2em;align-items:center;text-align:center;border:none;}
+        header:hover{letter-spacing:0.2em;word-spacing:0.1rem;
+          font-size:1.2em;}
+
+      .section{height:78vh;border:none;}
+      .gameArea{
+        width:100%;min-height:100%;border:none;}
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="main">
+
+      <header>
+        <h1>Guess the word game .</h1>
+      </header>
+
+      <section>
+
+        <div class="gameArea">
+          <h3 class="msg"></h3>
+          <br/><br/>
+          <input type="text" class="hidden">
+          <button class="btn">Click here to Start</button>
+          <h3> <button class="score">0</button></h3>
+
+        </div>
+      </section>
+
+    </div>
+
+
+
+    <script>
+      const msg = document.querySelector('.msg');
+      const guess = document.querySelector('input');
+      const btn = document.querySelector('.btn');
+      let result = document.querySelector('.score');
+
+      let play = false;
+      let sWords = ['python','javascript','ruby','django','reactjs','angularjs','react native','electron','swift','java','rtool'];
+      let newWords = "";
+      let randWords = "";
+
+      const createNewWords = ()  =>{
+          let rand = Math.floor(Math.random() * sWords.length);
+          let newTempSwords = sWords[rand];
+          return newTempSwords;
+      }
+
+      const scrambleWords = (arr) =>{
+        for(let i=arr.length-1;i>0;i--){
+          let temp = arr[i];
+          let j = Math.floor(Math.random()*(i+1));
+          arr[i] = arr[j];
+          arr[j] = temp;
+        }
+        return arr;
+      }
+
+
+      btn.addEventListener('click',function(){
+        if(!play)
+        {
+          play = true;
+          btn.innerHTML = "GUESS";
+          guess.classList.toggle('hidden');
+          newWords = createNewWords();
+          randWords = scrambleWords(newWords.split("")).join("");
+          msg.innerHTML =  `Guess it : [ ${randWords} ]`;
+        }
+        else{
+          let tempWord = guess.value;
+          if(tempWord === newWords)
+          {
+            console.log("true");
+            play = false;
+            msg.innerHTML = `Correct. It is ${newWords} !`;
+            btn.innerHTML = "Continue\n";
+            let val = result.innerHTML;
+            let a = parseInt(val);
+            result.innerHTML = a+1;
+            guess.classList.toggle('hidden');
+            guess.value = "";
+          }else{
+            console.log("incorrect");
+            msg.innerHTML =  `Try again : [ ${randWords} ]`;
+          }
+        }
+      })
+
+
+    </script>
+  </body>
+</html>
